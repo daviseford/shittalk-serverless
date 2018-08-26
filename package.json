@@ -1,0 +1,26 @@
+{
+  "name": "shittalk-serverless",
+  "version": "1.0.0",
+  "description": "Serverless version of the world-famous Shittalk Generator",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daviseford/shittalk-serverless.git"
+  },
+  "keywords": [
+    "serverless",
+    "lambda"
+  ],
+  "author": "Davis E. Ford",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/daviseford/shittalk-serverless/issues"
+  },
+  "homepage": "https://github.com/daviseford/shittalk-serverless#readme",
+  "dependencies": {
+    "aws-sdk": "^2.302.0"
+  }
+}
