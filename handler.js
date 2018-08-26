@@ -4,6 +4,8 @@ const shittalkCreate = require('./shittalk-create.js');
 const shittalkReadAll = require('./shittalk-read-all.js');
 const shittalkReadOne = require('./shittalk-read-one.js');
 const shittalkUpdate = require('./shittalk-update.js');
+const shittalkUpVote = require('./shittalk-upvote.js');
+const shittalkDownVote = require('./shittalk-downvote.js');
 const shittalkDelete = require('./shittalk-delete.js');
 
 module.exports.create = (event, context, callback) => {
@@ -68,6 +70,37 @@ module.exports.update = (event, context, callback) => {
 
 module.exports.delete = (event, context, callback) => {
   shittalkDelete(event, (error, result) => {
+    const response = {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
+      body: JSON.stringify(result),
+    };
+
+    context.succeed(response);
+  });
+};
+
+
+module.exports.upvote = (event, context, callback) => {
+  shittalkUpVote(event, (error, result) => {
+    const response = {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
+      body: JSON.stringify(result),
+    };
+
+    context.succeed(response);
+  });
+};
+
+module.exports.downvote = (event, context, callback) => {
+  shittalkDownVote(event, (error, result) => {
     const response = {
       statusCode: 200,
       headers: {

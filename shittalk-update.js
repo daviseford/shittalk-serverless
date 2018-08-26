@@ -16,8 +16,11 @@ module.exports = (event, callback) => {
   // TODO: Delete rows that will go over the deletion limit
   return dynamoDb.put(params, (error, data) => {
     if (error) {
-      callback(error);
+      return callback(error, { error, data: {} });
     }
-    callback(error, params.Item);
+    if (!data || !data.Item) {
+      callback(error, { error, data: {} });
+    }
+    return callback(error, { error, data: data.Item });
   });
 };

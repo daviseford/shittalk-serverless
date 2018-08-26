@@ -13,8 +13,11 @@ module.exports = (event, callback) => {
 // TODO: Not sure if we'll allow this operation from the front-end
   return dynamoDb.delete(params, (error, data) => {
     if (error) {
-      callback(error);
+      return callback(error, { error, data: {} });
     }
-    callback(error, params.Key);
+    if (!data || !data.Item) {
+      callback(error, { error, data: {} });
+    }
+    return callback(error, { error, data: params.Key });
   });
 };

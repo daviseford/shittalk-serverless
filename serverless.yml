@@ -24,10 +24,8 @@ provider:
   name: aws
   runtime: nodejs8.10
   cors: true
-
-# you can overwrite defaults here
-#  stage: dev
-#  region: us-east-1
+  stage: dev
+  region: us-east-1
 
 # you can add statements to the Lambda function's IAM Role here
 #  iamRoleStatements:
@@ -45,15 +43,15 @@ provider:
 #            - "Ref" : "ServerlessDeploymentBucket"
 #            - "/*"
 iamRoleStatements:
-  - Effect: Allow
+  - Effect: "Allow"
     Action:
-      - dynamodb:DescribeTable
-      - dynamodb:Query
-      - dynamodb:Scan
-      - dynamodb:GetItem
-      - dynamodb:PutItem
-      - dynamodb:UpdateItem
-      - dynamodb:DeleteItem
+      - "dynamodb:DescribeTable"
+      - "dynamodb:Query"
+      - "dynamodb:Scan"
+      - "dynamodb:GetItem"
+      - "dynamodb:PutItem"
+      - "dynamodb:UpdateItem"
+      - "dynamodb:DeleteItem"
     Resource: "arn:aws:dynamodb:us-east-1:*:*"
 
 # you can define service wide environment variables here
@@ -96,6 +94,20 @@ functions:
     events:
       - http:
           path: shittalk/{id}
+          method: put
+          cors: true
+  upvote:
+    handler: handler.upvote
+    events:
+      - http:
+          path: shittalk/upvote/{id}
+          method: put
+          cors: true
+  downvote:
+    handler: handler.downvote
+    events:
+      - http:
+          path: shittalk/downvote/{id}
           method: put
           cors: true
   delete:
