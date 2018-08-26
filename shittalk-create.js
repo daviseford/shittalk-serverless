@@ -24,6 +24,7 @@ module.exports = (event, callback) => {
   data.updatedAt = new Date().getTime();
   data.up_votes = 0
   data.down_votes = 0
+  data.net_votes = 0
   data.submission = cleanText(data.submission)
 
   const params = {

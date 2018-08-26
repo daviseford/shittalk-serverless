@@ -16,7 +16,7 @@ module.exports = (event, callback) => {
     Key: {
       id: data.id
     },
-    UpdateExpression: "set up_votes = up_votes + :val",
+    UpdateExpression: "set up_votes = up_votes + :val, net_votes = up_votes - down_votes",
     ExpressionAttributeValues: {
       ":val": 1
     },

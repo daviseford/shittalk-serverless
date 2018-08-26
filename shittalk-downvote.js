@@ -16,7 +16,7 @@ module.exports = (event, callback) => {
     Key: {
       id: data.id
     },
-    UpdateExpression: "set down_votes = down_votes - :val",
+    UpdateExpression: "set down_votes = down_votes + :val, net_votes = up_votes - down_votes",
     ExpressionAttributeValues: {
       ":val": 1
     },
@@ -27,9 +27,16 @@ module.exports = (event, callback) => {
     if (error) {
       return callback(error, { error, success: false });
     }
-    if (!data || !data.Item) {
+    if (!data || !data.Attributes) {
       callback(error, { error, success: false });
     }
-    return callback(error, { error, success: true, data: data.Item });
+
+    if (data.Attributes.net_votes < -3) {
+      const delete_params = { TableName: 'shittalk', Key: { id: data.id } };
+      dynamoDb.delete(delete_params, (error, data) => {
+        console.log('Deleted row for too many downvotes.')
+      });
+    }
+    return callback(error, { error, success: true, data: data.Attributes });
   });
 };
