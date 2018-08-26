@@ -6,7 +6,7 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient();
 module.exports = (event, callback) => {
   const params = {
     TableName: 'shittalk',
-    IndexName: 'createdLSI',
+    IndexName: 'netvoteLSI',
     ConsistentRead: false,
     Limit: 20,
     ScanIndexForward: true,
