@@ -5,17 +5,16 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 module.exports = (event, callback) => {
   const data = JSON.parse(event.body);
+  const id = event.pathParameters.id;
 
-  data.id = event.pathParameters.id;
+  data.id = id;
   data.updatedAt = new Date().getTime();
 
   // Increment an atomic counter
   const params = {
     TableName: 'shittalk',
     Item: data,
-    Key: {
-      id: data.id
-    },
+    Key: { id },
     UpdateExpression: "set down_votes = down_votes + :val, net_votes = up_votes - down_votes",
     ExpressionAttributeValues: {
       ":val": 1
@@ -32,11 +31,13 @@ module.exports = (event, callback) => {
     }
 
     if (data.Attributes.net_votes < -3) {
-      const delete_params = { TableName: 'shittalk', Key: { id: data.id } };
+      const delete_params = { TableName: 'shittalk', Key: { id } };
       dynamoDb.delete(delete_params, (error, data) => {
         console.log('Deleted row for too many downvotes.')
+        return callback(error, { error, success: true, deleted: true, data: data.Attributes });
       });
+    } else {
+      return callback(error, { error, success: true, data: data.Attributes });
     }
-    return callback(error, { error, success: true, data: data.Attributes });
   });
 };
