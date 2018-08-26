@@ -96,6 +96,13 @@ functions:
           path: shittalk/top
           method: get
           cors: true
+  readOld:
+    handler: handler.readOld
+    events:
+      - http:
+          path: shittalk/old
+          method: get
+          cors: true
   readOne:
     handler: handler.readOne
     events:
@@ -201,6 +208,9 @@ resources:
             AttributeName: createdAt
             AttributeType: N
           - 
+            AttributeName: updatedAt
+            AttributeType: N
+          - 
             AttributeName: net_votes
             AttributeType: N
         KeySchema:
@@ -238,6 +248,14 @@ resources:
           - AttributeName: id
             KeyType: HASH
           - AttributeName: net_votes
+            KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: updatedLSI
+          KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: updatedAt
             KeyType: RANGE
           Projection:
             ProjectionType: ALL

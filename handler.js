@@ -3,6 +3,7 @@
 const shittalkCreate = require('./shittalk-create.js');
 const shittalkReadAll = require('./shittalk-read-all.js');
 const shittalkReadRecent = require('./shittalk-read-recent.js');
+const shittalkReadOld = require('./shittalk-read-old.js');
 const shittalkReadTop = require('./shittalk-read-top.js');
 const shittalkReadOne = require('./shittalk-read-one.js');
 const shittalkUpdate = require('./shittalk-update.js');
@@ -43,6 +44,21 @@ module.exports.readAll = (event, context, callback) => {
 
 module.exports.readRecent = (event, context, callback) => {
   shittalkReadRecent(event, (error, result) => {
+    const response = {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
+      body: JSON.stringify(result),
+    };
+
+    context.succeed(response);
+  });
+};
+
+module.exports.readOld = (event, context, callback) => {
+  shittalkReadOld(event, (error, result) => {
     const response = {
       statusCode: 200,
       headers: {
