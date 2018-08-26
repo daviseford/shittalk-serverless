@@ -13,6 +13,9 @@ module.exports = (event, callback) => {
   const params = {
     TableName: 'shittalk',
     Item: data,
+    Key: {
+      id: data.id
+    },
     UpdateExpression: "set down_votes = down_votes - :val",
     ExpressionAttributeValues: {
       ":val": 1
@@ -20,13 +23,13 @@ module.exports = (event, callback) => {
     ReturnValues: "UPDATED_NEW"
   };
 
-  return dynamoDb.put(params, (error, data) => {
+  return dynamoDb.update(params, (error, data) => {
     if (error) {
-      return callback(error, { error, data: {} });
+      return callback(error, { error, success: false });
     }
     if (!data || !data.Item) {
-      callback(error, { error, data: {} });
+      callback(error, { error, success: false });
     }
-    return callback(error, { error, data: data.Item });
+    return callback(error, { error, success: true, data: data.Item });
   });
 };

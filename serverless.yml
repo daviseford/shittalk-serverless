@@ -82,6 +82,13 @@ functions:
           path: shittalk
           method: get
           cors: true
+  readRecent:
+    handler: handler.readRecent
+    events:
+      - http:
+          path: shittalk/recent
+          method: get
+          cors: true
   readOne:
     handler: handler.readOne
     events:
