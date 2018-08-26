@@ -7,6 +7,7 @@ module.exports = (event, callback) => {
   const params = {
     TableName: 'shittalk',
     Limit: 20,
+    ScanIndexForward: true,
   };
 
   return dynamoDb.scan(params, (error, data) => {

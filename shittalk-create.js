@@ -21,6 +21,7 @@ module.exports = (event, callback) => {
   const data = JSON.parse(event.body);
 
   data.id = uuid.v1();
+  data.createdAt = new Date().getTime();
   data.updatedAt = new Date().getTime();
   data.up_votes = 0
   data.down_votes = 0
@@ -32,6 +33,9 @@ module.exports = (event, callback) => {
     Item: data
   };
 
+  
+
+  // TODO: Check for duplicates here?
   return dynamoDb.put(params, (error, data) => {
     if (error) {
       callback(error, { error, success: false, data: params.Item });

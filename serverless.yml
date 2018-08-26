@@ -96,6 +96,13 @@ functions:
           path: shittalk/{id}
           method: get
           cors: true
+  checkDuplicate:
+    handler: handler.checkDuplicate
+    events:
+      - http:
+          path: shittalk/check-duplicate
+          method: post
+          cors: true
   update:
     handler: handler.update
     events:
@@ -172,19 +179,50 @@ functions:
 
 resources:
   Resources:
-    TodosDynamoDbTable:
+    ShittalkDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
-          -
+          - 
             AttributeName: id
             AttributeType: S
+          - 
+            AttributeName: submission
+            AttributeType: S
+          - 
+            AttributeName: createdAt
+            AttributeType: N
+          - 
+            AttributeName: net_votes
+            AttributeType: N
         KeySchema:
-          -
-            AttributeName: id
+          - AttributeName: id
             KeyType: HASH
+          - AttributeName: submission
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: 'shittalk'
+        GlobalSecondaryIndexes:
+          - IndexName: submissionGSI
+            KeySchema:
+            - AttributeName: submission
+              KeyType: HASH
+            - AttributeName: net_votes
+              KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+        LocalSecondaryIndexes:
+        - IndexName: createdLSI
+          KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: createdAt
+            KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
