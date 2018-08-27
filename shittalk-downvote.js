@@ -5,7 +5,6 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 module.exports = (event, callback) => {
   const { id, submission } = JSON.parse(event.body)
-  console.log(event.body)
   const params = {
     TableName: 'shittalk',
     Key: { id, submission },
@@ -16,8 +15,6 @@ module.exports = (event, callback) => {
     },
     ReturnValues: "UPDATED_NEW"
   };
-
-  console.log(params)
 
   return dynamoDb.update(params, (uError, uData) => {
     if (uError) {
