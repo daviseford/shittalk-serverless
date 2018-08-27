@@ -9,7 +9,7 @@ module.exports = (event, callback) => {
   const params = {
     TableName: 'shittalk',
     Key: { id, submission },
-    UpdateExpression: "SET down_votes = down_votes + :val, net_votes = up_votes - down_votes, updatedAt = :vtime",
+    UpdateExpression: "SET down_votes = down_votes + :val, net_votes = net_votes - :val, updatedAt = :vtime",
     ExpressionAttributeValues: {
       ":val": 1,
       ":vtime": new Date().getTime(),
