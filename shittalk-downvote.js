@@ -4,40 +4,38 @@ const AWS = require('aws-sdk');
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 module.exports = (event, callback) => {
-  const data = JSON.parse(event.body);
-  const id = event.pathParameters.id;
-
-  data.id = id;
-  data.updatedAt = new Date().getTime();
-
-  // Increment an atomic counter
+  const { id, submission } = event
+  console.log(event.body)
   const params = {
     TableName: 'shittalk',
-    Item: data,
-    Key: { id },
-    UpdateExpression: "set down_votes = down_votes + :val, net_votes = up_votes - down_votes",
+    Key: { id, submission },
+    UpdateExpression: "SET down_votes = down_votes + :val, net_votes = up_votes - down_votes, updatedAt = :vtime",
     ExpressionAttributeValues: {
-      ":val": 1
+      ":val": 1,
+      ":vtime": new Date().getTime(),
     },
     ReturnValues: "UPDATED_NEW"
   };
 
-  return dynamoDb.update(params, (error, data) => {
-    if (error) {
-      return callback(error, { error, success: false });
+  console.log(params)
+
+  return dynamoDb.update(params, (uError, uData) => {
+    if (uError) {
+      console.error("Unable to update item. Error JSON:", JSON.stringify(uError, null, 2))
+      return callback(uError, { error: uError, success: false });
     }
-    if (!data || !data.Attributes) {
-      callback(error, { error, success: false });
+    if (!uData || !uData.Attributes) {
+      return callback(uError, { error: uError, success: false });
     }
 
-    if (data.Attributes.net_votes < -3) {
-      const delete_params = { TableName: 'shittalk', Key: { id } };
-      dynamoDb.delete(delete_params, (error, data) => {
-        console.log('Deleted row for too many downvotes.')
-        return callback(error, { error, success: true, deleted: true, data: data.Attributes });
+    if (uData.Attributes.net_votes < -3) {
+      const delete_params = { TableName: 'shittalk', Key: { id, submission } };
+      dynamoDb.delete(delete_params, (dError, dData) => {
+        console.info('Deleted row due to too many downvotes.')
+        return callback(dError, { error: dError, success: true, deleted: true, data: uData.Attributes });
       });
     } else {
-      return callback(error, { error, success: true, data: data.Attributes });
+      return callback(uError, { error: uError, success: true, data: uData.Attributes });
     }
   });
 };

@@ -27,21 +27,6 @@ provider:
   stage: dev
   region: us-east-1
 
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
 iamRoleStatements:
   - Effect: "Allow"
     Action:
@@ -128,15 +113,15 @@ functions:
     handler: handler.upvote
     events:
       - http:
-          path: shittalk/upvote/{id}
-          method: put
+          path: shittalk/upvote
+          method: post
           cors: true
   downvote:
     handler: handler.downvote
     events:
       - http:
-          path: shittalk/downvote/{id}
-          method: put
+          path: shittalk/downvote
+          method: post
           cors: true
   delete:
     handler: handler.delete
