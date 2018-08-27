@@ -4,7 +4,8 @@ const AWS = require('aws-sdk');
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 module.exports = (event, callback) => {
-  const { id, submission } = event.body
+  const { id, submission } = JSON.parse(event.body)
+  console.log(event.body)
   const params = {
     TableName: 'shittalk',
     Key: { id, submission },

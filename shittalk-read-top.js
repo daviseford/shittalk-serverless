@@ -8,7 +8,6 @@ module.exports = (event, callback) => {
     TableName: 'shittalk',
     IndexName: 'netvoteLSI',
     ConsistentRead: false,
-    Limit: 20,
     ScanIndexForward: true,
   };
 
@@ -19,6 +18,9 @@ module.exports = (event, callback) => {
     if (!data || !data.Items) {
       callback(error, { error, data: [] });
     }
-    return callback(error, { error, data: data.Items });
+    return callback(error, {
+      error,
+      data: data.Items.sort((a, b) => b.net_votes - a.net_votes).slice(0, 15)
+    });
   });
 };

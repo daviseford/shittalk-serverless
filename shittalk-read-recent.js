@@ -9,7 +9,7 @@ module.exports = (event, callback) => {
     IndexName: 'createdLSI',
     ConsistentRead: false,
     Limit: 20,
-    ScanIndexForward: true,
+    ScanIndexForward: false,
   };
 
   return dynamoDb.scan(params, (error, data) => {
@@ -19,6 +19,8 @@ module.exports = (event, callback) => {
     if (!data || !data.Items) {
       callback(error, { error, data: [] });
     }
-    return callback(error, { error, data: data.Items });
+    return callback(error, { error, 
+      data: data.Items.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)).slice(0, 15) 
+    });
   });
 };
