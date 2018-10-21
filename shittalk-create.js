@@ -28,17 +28,20 @@ module.exports = (event, callback) => {
   data.net_votes = 0
   data.submission = cleanText(data.submission)
 
+  // Block blank entries
+  if (!data.submission || CleanTextUtils.strip.whitespace(data.submission) === '') {
+    return callback(error, { error, success: false, data: data.submission });
+  }
+
   const params = {
     TableName: 'shittalk',
     Item: data
   };
 
-  
-
   // TODO: Check for duplicates here?
   return dynamoDb.put(params, (error, data) => {
     if (error) {
-      callback(error, { error, success: false, data: params.Item });
+      return callback(error, { error, success: false, data: params.Item });
     }
     console.log(error, data)
     callback(error, { error, success: true, data: params.Item });
