@@ -1,6 +1,6 @@
 {
   "name": "shittalk-serverless",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Serverless version of the world-famous Shittalk Generator",
   "main": "index.js",
   "scripts": {
@@ -21,8 +21,9 @@
   },
   "homepage": "https://github.com/daviseford/shittalk-serverless#readme",
   "dependencies": {
-    "aws-sdk": "^2.302.0",
-    "clean-text-utils": "^1.1.15",
+    "aws-sdk": "^2.339.0",
+    "clean-text-utils": "^1.1.17",
+    "striptags": "^3.1.1",
     "uuid": "^3.3.2"
   }
 }

@@ -1,18 +1,20 @@
 'use strict';
-
+const { strip, replace } = require('clean-text-utils');
 const AWS = require('aws-sdk');
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
+const striptags = require('striptags');
 const uuid = require('uuid');
-const CleanTextUtils = require('clean-text-utils');
 
 const cleanText = (str) => {
-  let s = CleanTextUtils.strip.emoji(str)
-  s = CleanTextUtils.strip.nonASCII(str)
-  s = CleanTextUtils.strip.newlines(str)
-  s = CleanTextUtils.strip.bom(str)
-  s = CleanTextUtils.replace.smartChars(str)
-  s = CleanTextUtils.replace.diacritics(str)
-  s = CleanTextUtils.replace.exoticChars(str)
+  let s = striptags(str) // Remove HTML tags
+  s = strip.emoji(s)
+  s = strip.nonASCII(s)
+  s = strip.newlines(s)
+  s = strip.extraSpace(s)
+  s = strip.bom(s)
+  s = replace.smartChars(s)
+  s = replace.diacritics(s)
+  s = replace.exoticChars(s)
   // TODO: remove slurs here? or frontend?
   return s
 }
@@ -29,7 +31,8 @@ module.exports = (event, callback) => {
   data.submission = cleanText(data.submission)
 
   // Block blank entries
-  if (!data.submission || CleanTextUtils.strip.whitespace(data.submission) === '') {
+  if (!data.submission || strip.whitespace(data.submission) === '') {
+    const error = 'Blank submissions are not allowed.'
     return callback(error, { error, success: false, data: data.submission });
   }
 
