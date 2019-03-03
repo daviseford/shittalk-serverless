@@ -8,7 +8,6 @@ module.exports = (event, callback) => {
     TableName: 'shittalk',
     IndexName: 'createdLSI',
     ConsistentRead: false,
-    Limit: 20,
     ScanIndexForward: false,
   };
 
@@ -20,7 +19,7 @@ module.exports = (event, callback) => {
       callback(error, { error, data: [] });
     }
     return callback(error, { error, 
-      data: data.Items.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)).slice(0, 15) 
+      data: data.Items.sort((a, b) => b.createdAt - a.createdAt).slice(0, 20) 
     });
   });
 };
