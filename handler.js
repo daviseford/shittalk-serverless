@@ -8,6 +8,7 @@ const shittalkReadTop = require('./shittalk-read-top.js');
 const shittalkUpVote = require('./shittalk-upvote.js');
 const shittalkDownVote = require('./shittalk-downvote.js');
 const shittalkCheckDuplicate = require('./shittalk-check-duplicate.js');
+const shittalkGenerateCfg = require('./shittalk-generate-cfg.js');
 
 module.exports.create = (event, context, callback) => {
   shittalkCreate(event, (error, result) => {
@@ -116,6 +117,21 @@ module.exports.downvote = (event, context, callback) => {
 
 module.exports.checkDuplicate = (event, context, callback) => {
   shittalkCheckDuplicate(event, (error, result) => {
+    const response = {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
+      body: JSON.stringify(result),
+    };
+
+    context.succeed(response);
+  });
+};
+
+module.exports.generateCfg = (event, context, callback) => {
+  shittalkGenerateCfg(event, (error, result) => {
     const response = {
       statusCode: 200,
       headers: {
