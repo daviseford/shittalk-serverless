@@ -21,7 +21,10 @@ iamRoleStatements:
       - "dynamodb:UpdateItem"
       - "dynamodb:DeleteItem"
     Resource: "arn:aws:dynamodb:us-east-1:*:*"
-
+  - Effect: "Allow"
+    Action: 
+      - "s3:*"
+    Resource: "arn:aws:s3:::shittalk-cfgs/*"
 functions:
   create:
     handler: handler.create
@@ -71,6 +74,13 @@ functions:
       - http:
           path: shittalk/downvote
           method: post
+          cors: true
+  generateCfg:
+    handler: handler.generateCfg
+    events:
+      - http:
+          path: shittalk/generate_cfg
+          method: get
           cors: true
 
 resources:
