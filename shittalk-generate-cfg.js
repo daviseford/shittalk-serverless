@@ -3,6 +3,7 @@
 const AWS = require('aws-sdk');
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const s3 = new AWS.S3();
+const { DateTime } = require('luxon');
 
 const build_say = (items) => {
   return items.map((str, i) => {
@@ -59,32 +60,32 @@ module.exports = (event, callback) => {
 
 
 const build_cfg = (say, diceroll) => {
+  const dt = DateTime.local()
   return `
 //========================================================================================
-// Copyright Davis Ford 2019 -------------------------------------------------------------
-// http://daviseford.com/shittalk/  ------------------------------------------------------
+// Copyright Davis Ford 2016-${dt.year} -------------------------------------------------------------
+// https://daviseford.com/shittalk/  ------------------------------------------------------
 //========================================================================================
 
+// This version of shittalk.cfg was generated on ${dt.toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS)}
 
 //========================================================================================
 // SCRIPT SETUP AND INSTALLATION----------------------------------------------------------
 //========================================================================================
 //  1.) Add "exec shittalk.cfg" (no quotes) to your autoexec.cfg
-//  2.) Add the following binds (either uncomment them by removing slashes here, or paste them
-//  in another bind file)
-//  3.) Check that shittalk.cfg loads properly by launching your game,
-//  opening console, and typing "exec shittalk.cfg" (no quotes)
+//  2.) Check that shittalk.cfg loads properly by launching your game,
+//      opening console, and typing "exec shittalk.cfg" (no quotes)
 //========================================================================================
 // BINDS ---------------------------------------------------------------------------------
 // I recommend binding "cycle_both" to your Push-To-Talk key -----------------------------
 // And perhaps mwheeldown/mwheelup -------------------------------------------------------
 //========================================================================================
 
-bind "X"			"trashcan_dice"
-bind "TAB" 			"cycle_both"
+bind "X"			"trashcan_dice" // Issue an insult to all chat
+bind "TAB" 		"cycle_both"    // Cycle binds
 
 //bind "MWHEELUP"      "cycle_both" // remove the "//" comment from these binds
-//bind "MWHEELDOWN"    "cycle_both" // to use your mouse wheel as a randomizer
+//bind "MWHEELDOWN"    "cycle_both" // to use your mouse wheel as a randomizer (recommended)
 
 //========================================================================================
 // USAGE----------------------------------------------------------------------------------
@@ -94,13 +95,13 @@ bind "TAB" 			"cycle_both"
 // This provides the psuedo-random generation of insults
 // Hitting X will all-chat an insult
 //
-// The more keys you can bind "cycle_both" to, the better. The "cycle_both" command is what
-// provides the psuedo-randomness of the script.
+// The more keys you can bind "cycle_both" to, the better. 
+// The "cycle_both" command is what provides the psuedo-randomness of the script.
 //
 // Enjoy :>
 
 //========================================================================================
-// HELP----------------------------------------------------------------------------------
+// HELP: MY BINDS AREN'T WORKING!---------------------------------------------------------
 //========================================================================================
 // The most common error with this script is that it is prone to being unloaded
 // by modern-day TF2 configs. Since most weapon-switcher scripts force 'unbindall',
@@ -114,18 +115,16 @@ bind "TAB" 			"cycle_both"
 ${say}
 
 //========================================================================================
-//----------------------------------------------------------------------------------------
+// DON'T MODIFY ANYTHING AFTER THIS POINT-------------------------------------------------
 //========================================================================================
 
 ${diceroll}
 
 //========================================================================================
-//----------------------------------------------------------------------------------------
+//HELPER FUNCTIONS (DO NOT EDIT)----------------------------------------------------------
 //========================================================================================
+
 alias "trashcan_dice" "trashcan_result; trashcan_cycle"
-//========================================================================================
-//----------------------------------------------------------------------------------------
-//========================================================================================
 alias "trashcan_cycle" "trashcan_diceroll_0"
 alias "w_t_cyc" "trashcan_cycle"
 alias "cycle_both" "cycle_b_1"
@@ -138,7 +137,7 @@ alias "cycle_b_5" "w_t_cyc; w_t_cyc; w_t_cyc; w_t_cyc; w_t_cyc; alias cycle_both
 
 clear
 echo "LOADING SHITTALK.CFG. WHAT IS THE ODDS :D"
-echo "By Davis E. Ford. www.daviseford.com/shittalk"
+echo "By Davis E. Ford. https://daviseford.com/shittalk"
 echo "Use with caution."
 
 `
