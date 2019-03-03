@@ -44,6 +44,7 @@ module.exports = (event, callback) => {
       ACL: 'public-read',
     }, function (err, data) {
       if (err) {
+        console.error('Error putting object')
         console.log(err, err.stack);
         return callback(error, { error: err, data: null })
       }
