@@ -20,7 +20,7 @@ module.exports = (event, callback) => {
     }
     return callback(error, {
       error,
-      data: data.Items.sort((a, b) => new Date(a.updatedAt) - new Date(b.updatedAt)).slice(0, 5)
+      data: data.Items.sort((a, b) => a.updatedAt - b.updatedAt).slice(0, 5)
     });
   });
 };

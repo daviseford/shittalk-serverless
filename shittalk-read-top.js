@@ -20,7 +20,7 @@ module.exports = (event, callback) => {
     }
     return callback(error, {
       error,
-      data: data.Items.sort((a, b) => b.net_votes - a.net_votes).slice(0, 15)
+      data: data.Items.sort((a, b) => b.net_votes - a.net_votes).slice(0, 20)
     });
   });
 };
