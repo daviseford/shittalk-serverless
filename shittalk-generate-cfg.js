@@ -33,7 +33,7 @@ module.exports = (event, callback) => {
     if (!data || !data.Items) {
       callback(error, { error, data: [] });
     }
-    const items = data.Items.sort((a, b) => b.net_votes - a.net_votes).slice(0, 200).map(x => x.submission)
+    const items = data.Items.sort((a, b) => b.net_votes - a.net_votes).filter(x => x.net_votes > 0).slice(0, 200).map(x => x.submission)
     const [say, diceroll] = [build_say(items), build_diceroll(items)]
     const cfg = build_cfg(say, diceroll)
 
