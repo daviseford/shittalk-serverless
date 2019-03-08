@@ -33,6 +33,13 @@ functions:
           path: shittalk
           method: post
           cors: true
+  readAll:
+    handler: handler.readAll
+    events:
+      - http:
+          path: shittalk/all
+          method: get
+          cors: true
   readRecent:
     handler: handler.readRecent
     events:
