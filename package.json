@@ -21,9 +21,10 @@
   },
   "homepage": "https://github.com/daviseford/shittalk-serverless#readme",
   "dependencies": {
-    "aws-sdk": "^2.413.0",
+    "aws-sdk": "^2.417.0",
     "clean-text-utils": "^1.1.17",
-    "luxon": "^1.11.3",
+    "lodash": "^4.17.11",
+    "luxon": "^1.11.4",
     "striptags": "^3.1.1",
     "uuid": "^3.3.2"
   }

@@ -54,6 +54,13 @@ functions:
           path: shittalk/old
           method: get
           cors: true
+  readRandom:
+    handler: handler.readRandom
+    events:
+      - http:
+          path: shittalk/random
+          method: get
+          cors: true
   checkDuplicate:
     handler: handler.checkDuplicate
     events:
